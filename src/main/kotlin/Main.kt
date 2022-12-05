@@ -13,29 +13,25 @@ object ChatService {
 
     private var messageIdCounter = 1
 
-    private fun <E> MutableMap<Int, E>.throwIfMessageNotFound(desiredToFindId: Int) {
-        chats.forEach { it ->
-            it.value.messages.forEach {
+    private fun <E> MutableMap<Int,E>.throwIfMessageNotFound(chatId: Int, desiredToFindId: Int): MutableList<Message> {
+        chats[chatId]?.messages?.forEach {
                 if (it.id == desiredToFindId) {
-                    return
+                    return chats[chatId]!!.messages
                 }
             }
-        }
         throw MessageNotFoundException("Message with id $desiredToFindId not found!")
     }
 
-    private fun <E> MutableMap<Int, E>.throwIfChatNotFound(desiredToFindId: Int) {
-        this.forEach {
-            if (it.key == desiredToFindId) {
-                return
-            }
+    private fun <Chat> MutableMap<Int, Chat>.throwIfChatNotFound(desiredToFindId: Int): MutableMap<Int, Chat> {
+        if (this.containsKey(desiredToFindId)) {
+            return this
         }
         throw ChatNotFoundException("Chat with id $desiredToFindId not found!")
     }
 
     private fun <E> MutableMap<Int, E>.deleteChatIfEmpty(chatId: Int) {
         if (chats[chatId]!!.messages.isEmpty()) {
-            deleteChat(chatId)
+            chats.remove(chatId)
         }
     }
 
@@ -55,10 +51,9 @@ object ChatService {
         val emptyMessage = Message(0, true, "No messages yet")
         val map = chats
         map.values.forEach {
-            if (it.messages.isEmpty()) {
-                it.messages.add(emptyMessage)
-            } else {
-                it.messages = mutableListOf(it.messages.last())
+            when (it.messages.isEmpty()) {
+              true ->  it.messages.add(emptyMessage)
+              false ->  it.messages = mutableListOf(it.messages.last())
             }
         }
         return map
@@ -66,29 +61,28 @@ object ChatService {
 
     fun getMessages(recipientId: Int, messagesCount: Int): List<Message> {
         chats.throwIfChatNotFound(recipientId)
-        val chat = chats[recipientId]
-        return chat!!.messages.takeLast(messagesCount).onEach { it.read = true }
+        return chats[recipientId]!!.messages.takeLast(messagesCount).onEach { it.read = true }
     }
 
     fun unreadChatsCount() = chats.values.count { chat -> chat.messages.any { !it.read } }
 
     fun editMessage(recipientId: Int, editedMessage: Message): Message {
-        chats.throwIfMessageNotFound(editedMessage.id)
-        chats[recipientId]?.messages?.removeIf { it.id == editedMessage.id }
-        chats[recipientId]?.messages?.add(editedMessage)
+        chats.throwIfMessageNotFound(recipientId,editedMessage.id)
+            .apply { removeIf {it.id == editedMessage.id}}
+            .apply { add(editedMessage) }
         return editedMessage
     }
 
     fun deleteMessage(recipientId: Int, messageId: Int): Boolean {
-        chats.throwIfMessageNotFound(messageId)
-        chats[recipientId]?.messages?.removeIf { it.id == messageId }
+        chats.throwIfMessageNotFound(recipientId,messageId)
+            .apply { removeIf { it.id == messageId } }
         chats.deleteChatIfEmpty(recipientId)
         return true
     }
 
     fun deleteChat(recipientId: Int): Boolean {
         chats.throwIfChatNotFound(recipientId)
-        chats.remove(recipientId)
+            .apply { remove(recipientId) }
         return true
     }
 
