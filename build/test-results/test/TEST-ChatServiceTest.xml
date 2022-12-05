@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ChatServiceTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2022-11-24T17:59:10" hostname="DESKTOP-1M1A4OM" time="0.286">
+<testsuite name="ChatServiceTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2022-12-05T16:00:40" hostname="DESKTOP-1M1A4OM" time="0.491">
   <properties/>
-  <testcase name="addMessage_NoChat" classname="ChatServiceTest" time="0.194"/>
+  <testcase name="addMessage_NoChat" classname="ChatServiceTest" time="0.222"/>
   <testcase name="deleteChat_ShouldThrow" classname="ChatServiceTest" time="0.002"/>
-  <testcase name="editMessage" classname="ChatServiceTest" time="0.01"/>
+  <testcase name="editMessage" classname="ChatServiceTest" time="0.049"/>
   <testcase name="deleteMessage_ShouldThrow" classname="ChatServiceTest" time="0.001"/>
-  <testcase name="addMessage_ChatExist" classname="ChatServiceTest" time="0.001"/>
+  <testcase name="addMessage_ChatExist" classname="ChatServiceTest" time="0.011"/>
   <testcase name="getMessages_ShouldThrow" classname="ChatServiceTest" time="0.001"/>
   <testcase name="editMessage_ShouldThrow" classname="ChatServiceTest" time="0.001"/>
-  <testcase name="deleteMessage" classname="ChatServiceTest" time="0.006"/>
-  <testcase name="getMessages" classname="ChatServiceTest" time="0.002"/>
-  <testcase name="deleteChat" classname="ChatServiceTest" time="0.0"/>
-  <testcase name="getChats" classname="ChatServiceTest" time="0.063"/>
+  <testcase name="deleteMessage" classname="ChatServiceTest" time="0.011"/>
+  <testcase name="getMessages" classname="ChatServiceTest" time="0.001"/>
+  <testcase name="deleteChat" classname="ChatServiceTest" time="0.001"/>
+  <testcase name="getChats" classname="ChatServiceTest" time="0.181"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
